@@ -1,0 +1,114 @@
+
+<style>*{box-sizing:border-box;margin:0;padding:0;}body{background:#fff;font-family:system-ui,-apple-system,sans-serif;}</style>
+
+<div style="margin-bottom:5px;">
+  <div style="font-size:12px;font-weight:500;padding:4px 14px;background:#e6f1fb;border:1.5px solid #b5d4f4;border-radius:20px;display:inline-block;color:#185fa5;" id="l1">f₁ = 8 Hz</div>
+  <div style="width:100%;height:18vh;min-height:90px;position:relative;border-radius:10px;overflow:hidden;margin-top:5px;border:1.5px solid #e8e8e8;">
+    <canvas id="c1" style="position:absolute;top:0;left:0;width:100%;height:100%;display:block;"></canvas>
+  </div>
+</div>
+<div style="margin-bottom:5px;">
+  <div style="font-size:12px;font-weight:500;padding:4px 14px;background:#faeeda;border:1.5px solid #FAC775;border-radius:20px;display:inline-block;color:#854f0b;" id="l2">f₂ = 10 Hz</div>
+  <div style="width:100%;height:18vh;min-height:90px;position:relative;border-radius:10px;overflow:hidden;margin-top:5px;border:1.5px solid #e8e8e8;">
+    <canvas id="c2" style="position:absolute;top:0;left:0;width:100%;height:100%;display:block;"></canvas>
+  </div>
+</div>
+<div style="margin-bottom:8px;">
+  <div style="font-size:12px;font-weight:500;padding:4px 14px;background:#f5f5f5;border:1.5px solid #d0d0d0;border-radius:20px;display:inline-block;color:#2c2c2a;" id="l3">y₁+y₂ — battement: 2.0 Hz (fmoy=9.0 Hz)</div>
+  <div style="width:100%;height:22vh;min-height:110px;position:relative;border-radius:10px;overflow:hidden;margin-top:5px;border:1.5px solid #e8e8e8;">
+    <canvas id="c3" style="position:absolute;top:0;left:0;width:100%;height:100%;display:block;"></canvas>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 10px;">
+  <div style="border-radius:12px;padding:10px;text-align:center;background:#e6f1fb;border:1.5px solid #b5d4f4;"><div id="b1" style="font-size:20px;font-weight:500;color:#185fa5;">8 Hz</div><div style="font-size:11px;color:#185fa5;">f₁</div></div>
+  <div style="border-radius:12px;padding:10px;text-align:center;background:#faeeda;border:1.5px solid #FAC775;"><div id="b2" style="font-size:20px;font-weight:500;color:#854f0b;">10 Hz</div><div style="font-size:11px;color:#854f0b;">f₂</div></div>
+  <div style="border-radius:12px;padding:10px;text-align:center;background:#e1f5ee;border:1.5px solid #9FE1CB;"><div id="bb" style="font-size:20px;font-weight:500;color:#085041;">2.0 Hz</div><div style="font-size:11px;color:#085041;">f_bat = |f₁−f₂|</div></div>
+</div>
+
+<div style="font-size:13px;padding:10px 16px;border-radius:20px;background:#f5f5f5;border:1.5px solid #d0d0d0;color:#2c2c2a;margin:0 0 10px;font-family:ui-monospace,monospace;line-height:1.9;">
+  y₁+y₂ = 2A·cos(2π·<span style="color:#1D9E75;">f_bat/2</span>·t)·cos(2π·<span style="color:#7F77DD;">f_moy</span>·t)<br>
+  <span style="color:#1D9E75;font-weight:500;">enveloppe lente</span> × <span style="color:#7F77DD;font-weight:500;">porteuse rapide</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;margin:6px 0;">
+  <span style="min-width:110px;font-size:13px;font-weight:500;color:#2c2c2a;background:#f5f5f5;border:1.5px solid #d0d0d0;border-radius:20px;padding:6px 14px;">Fréquence f₁</span>
+  <input type="range" id="f1" min="1" max="20" value="8" step="1" style="flex:1;accent-color:#378ADD;">
+  <span id="f1v" style="min-width:52px;text-align:center;font-size:13px;font-weight:500;color:#2c2c2a;background:#f5f5f5;border:1.5px solid #d0d0d0;border-radius:20px;padding:6px 12px;">8 Hz</span>
+</div>
+<div style="display:flex;align-items:center;gap:12px;margin:6px 0;">
+  <span style="min-width:110px;font-size:13px;font-weight:500;color:#2c2c2a;background:#f5f5f5;border:1.5px solid #d0d0d0;border-radius:20px;padding:6px 14px;">Fréquence f₂</span>
+  <input type="range" id="f2" min="1" max="20" value="10" step="1" style="flex:1;accent-color:#BA7517;">
+  <span id="f2v" style="min-width:52px;text-align:center;font-size:13px;font-weight:500;color:#2c2c2a;background:#f5f5f5;border:1.5px solid #d0d0d0;border-radius:20px;padding:6px 12px;">10 Hz</span>
+</div>
+<div style="display:flex;align-items:center;gap:12px;margin:6px 0;">
+  <span style="min-width:110px;font-size:13px;font-weight:500;color:#2c2c2a;background:#f5f5f5;border:1.5px solid #d0d0d0;border-radius:20px;padding:6px 14px;">Vitesse défilement</span>
+  <input type="range" id="spd" min="0.1" max="3.0" value="1.0" step="0.1" style="flex:1;accent-color:#7F77DD;">
+  <span id="spdv" style="min-width:52px;text-align:center;font-size:13px;font-weight:500;color:#2c2c2a;background:#f5f5f5;border:1.5px solid #d0d0d0;border-radius:20px;padding:6px 12px;">1.0×</span>
+</div>
+
+<div style="display:flex;gap:8px;margin:12px 0 4px;flex-wrap:wrap;">
+  <button onclick="setF(8,10)" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid #d0d0d0;background:#fff;color:#2c2c2a;">Δf = 2 Hz</button>
+  <button onclick="setF(8,9)"  style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid #d0d0d0;background:#fff;color:#2c2c2a;">Δf = 1 Hz</button>
+  <button onclick="setF(7,12)" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid #d0d0d0;background:#fff;color:#2c2c2a;">Δf = 5 Hz</button>
+  <button onclick="setF(10,10)" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid #d0d0d0;background:#fff;color:#2c2c2a;">Δf = 0 (unisson)</button>
+  <button id="btn-p" onclick="togglePause()" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid #185fa5;background:#e6f1fb;color:#185fa5;">Pause</button>
+</div>
+
+<script>
+const c1=document.getElementById('c1'),c2=document.getElementById('c2'),c3=document.getElementById('c3');
+let paused=false,t=0;
+function setF(a,b){document.getElementById('f1').value=a;document.getElementById('f2').value=b;sync();}
+function sync(){
+  const f1=+document.getElementById('f1').value,f2=+document.getElementById('f2').value;
+  const spd=parseFloat(document.getElementById('spd').value);
+  document.getElementById('f1v').textContent=f1+' Hz';document.getElementById('f2v').textContent=f2+' Hz';
+  document.getElementById('spdv').textContent=spd.toFixed(1)+'×';
+  document.getElementById('b1').textContent=f1+' Hz';document.getElementById('b2').textContent=f2+' Hz';
+  document.getElementById('bb').textContent=Math.abs(f1-f2).toFixed(1)+' Hz';
+  document.getElementById('l1').textContent='f₁ = '+f1+' Hz';document.getElementById('l2').textContent='f₂ = '+f2+' Hz';
+  const fbat=Math.abs(f1-f2),fmoy=((f1+f2)/2).toFixed(1);
+  document.getElementById('l3').textContent='y₁+y₂ — battement: '+fbat.toFixed(1)+' Hz  (fmoy='+fmoy+' Hz)';
+}
+['f1','f2','spd'].forEach(id=>document.getElementById(id).addEventListener('input',sync));
+function togglePause(){paused=!paused;const b=document.getElementById('btn-p');if(paused){b.textContent='Reprendre';b.style.cssText='padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid #f09595;background:#fcebeb;color:#a32d2d;';}else{b.textContent='Pause';b.style.cssText='padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid #185fa5;background:#e6f1fb;color:#185fa5;';}}
+function drawSingle(canvas,color){
+  const r=canvas.parentElement.getBoundingClientRect();
+  const W=Math.round(r.width)||700,H=Math.round(r.height)||90;
+  canvas.width=W;canvas.height=H;
+  const ctx=canvas.getContext('2d');const cy=H/2,A=H/2-8;
+  const id=canvas.id==='c1'?'f1':'f2';
+  const f=+document.getElementById(id).value;
+  const winSec=4;
+  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(0,0,0,0.06)';ctx.lineWidth=0.6;ctx.setLineDash([3,8]);
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();ctx.setLineDash([]);
+  ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2;
+  for(let i=0;i<W;i++){const tt=t+(i/W)*winSec;const y=cy-Math.cos(2*Math.PI*f*tt)*A;i===0?ctx.moveTo(i,y):ctx.lineTo(i,y);}
+  ctx.stroke();
+}
+function drawSum(){
+  const canvas=c3;const r=canvas.parentElement.getBoundingClientRect();
+  const W=Math.round(r.width)||700,H=Math.round(r.height)||110;
+  canvas.width=W;canvas.height=H;
+  const ctx=canvas.getContext('2d');const cy=H/2,A=H/2-10;
+  const f1=+document.getElementById('f1').value,f2=+document.getElementById('f2').value;
+  const fbat=Math.abs(f1-f2);const winSec=4;
+  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(0,0,0,0.06)';ctx.lineWidth=0.6;ctx.setLineDash([3,8]);
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();ctx.setLineDash([]);
+  ctx.beginPath();ctx.strokeStyle='#1D9E75';ctx.lineWidth=1.8;ctx.globalAlpha=.55;
+  for(let i=0;i<W;i++){const tt=t+(i/W)*winSec;const y=cy-Math.abs(Math.cos(2*Math.PI*(fbat/2)*tt))*A;i===0?ctx.moveTo(i,y):ctx.lineTo(i,y);}ctx.stroke();
+  ctx.beginPath();for(let i=0;i<W;i++){const tt=t+(i/W)*winSec;const y=cy+Math.abs(Math.cos(2*Math.PI*(fbat/2)*tt))*A;i===0?ctx.moveTo(i,y):ctx.lineTo(i,y);}ctx.stroke();
+  ctx.globalAlpha=1;ctx.setLineDash([]);
+  ctx.beginPath();ctx.strokeStyle='#7F77DD';ctx.lineWidth=2;
+  for(let i=0;i<W;i++){const tt=t+(i/W)*winSec;const f1v=+document.getElementById('f1').value,f2v=+document.getElementById('f2').value;const v=(Math.cos(2*Math.PI*f1v*tt)+Math.cos(2*Math.PI*f2v*tt))/2;const y=cy-v*A;i===0?ctx.moveTo(i,y):ctx.lineTo(i,y);}ctx.stroke();
+}
+function loop(){
+  const spd=parseFloat(document.getElementById('spd').value);
+  if(!paused)t+=spd*0.013;
+  drawSingle(c1,'#378ADD');drawSingle(c2,'#D85A30');drawSum();
+  requestAnimationFrame(loop);
+}
+sync();loop();
+</script>
